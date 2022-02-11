@@ -10,7 +10,8 @@ public class Student {
     private long id;
     private String firstname;
     private String lastname;
-    @OneToOne
+    @ManyToOne
+    @JoinColumn(name = "CURRENTSEMESTER_ID")
     private Semester semester;
 
     public Student() {
@@ -21,8 +22,6 @@ public class Student {
         this.lastname = lastname;
     }
 
-    @Id
-    @Column(name = "ID")
     public long getId() {
         return id;
     }

@@ -11,16 +11,15 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 class FacadeTest {
-    Facade f = new Facade();
+    IFacade f = new Facade();
     List<Student> expected;
     /* TODO:
-            set up test database (ExamPreparationJPQL_test)
-            tear down test database
+            look over screenshots
             connect tables for functions:
                 Assign a new student to a semester
-                Find the total number of students, for a semester given the semester name as a parameter.
                 Find the total number of students in all semesters.
                 Find the teacher who teaches the most semesters.
+            nr 9 + 10
      */
 
     @BeforeEach
@@ -54,7 +53,7 @@ class FacadeTest {
 
     //Find all Students in the System with the first name Anders
     @Test
-    void testfindAllStudentsWithName() {
+    void testfindAllStudentsWithFirstName() {
         System.out.println("Find all Students in the System with the first name Anders");
         List<Student> expected2 = new ArrayList<>();
         String checkForName = "Anders";
@@ -63,7 +62,7 @@ class FacadeTest {
                 expected2.add(expected.get(i));
             }
         }
-        List<Student> actual = f.findAllStudentsWithName("Anders");
+        List<Student> actual = f.findAllStudentsWithFirstName("Anders");
         assertEquals(expected2, actual);
     }
 
@@ -86,8 +85,6 @@ class FacadeTest {
     @Test
     void assignStudentToSemester() {
         System.out.println("Assign a new student to a semester");
-        Student s = new Student("Inga", "Helgadottir");
-
 //        assertEquals(expected, actual);
     }*/
 
@@ -106,14 +103,16 @@ class FacadeTest {
         assertEquals(expected2, actual);
     }
 
-/*
+
     //Find (using JPQL)  the total number of students, for a semester given the semester name as a parameter.
     @Test
     void nbrOfStudentsInSemester() {
         System.out.println("Find (using JPQL)  the total number of students, for a semester given the semester name as a parameter");
-//        assertEquals(expected, actual);
+        int expected = 2;
+        int actual = f.nbrOfStudentsInSemester("CLdat-a14e");
+        assertEquals(expected, actual);
     }
-
+/*
     //Find (using JPQL) the total number of students in all semesters.
     @Test
     void nbrOfStudentsInAllSemesters() {

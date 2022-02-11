@@ -9,7 +9,7 @@ import javax.persistence.Persistence;
 import javax.persistence.TypedQuery;
 import java.util.List;
 
-public class Facade {
+public class Facade implements IFacade{
     EntityManagerFactory emf = Persistence.createEntityManagerFactory("pu");
 
     public static void main(String[] args){
@@ -28,7 +28,7 @@ public class Facade {
     }
 
     //Find all Students in the System with the first name Anders
-    public List<Student> findAllStudentsWithName(String name){
+    public List<Student> findAllStudentsWithFirstName(String name){
         EntityManager em = emf.createEntityManager();
         try{
             TypedQuery<Student> tq = em.createQuery("SELECT s FROM Student s WHERE s.firstname = :FIRSTNAME", Student.class);
@@ -72,7 +72,14 @@ public class Facade {
 
     //Find (using JPQL)  the total number of students, for a semester given the semester name as a parameter.
     public int nbrOfStudentsInSemester(String semester){
-        return 0;
+        EntityManager em = emf.createEntityManager();
+        try{
+            TypedQuery<Long> tq = em.createQuery("SELECT COUNT(s) FROM Student s WHERE s.semester.name = :sem", Long.class);
+            tq.setParameter("sem", semester);
+            return tq.getSingleResult().intValue();
+        }finally {
+            em.close();
+        }
     }
 
     //Find (using JPQL) the total number of students in all semesters.

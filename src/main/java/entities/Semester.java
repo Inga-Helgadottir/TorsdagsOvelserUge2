@@ -1,18 +1,19 @@
 package entities;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
 public class Semester {
     @Id
-    @Column(name = "CURRENTSEMESTER_ID")
+    @Column(name = "ID")
     private long id;
     private String description;
     private String name;
+    @OneToMany(mappedBy = "semester")
+    private List<Student> s = new ArrayList<>();
 
     public Semester() {
     }
