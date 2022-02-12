@@ -7,13 +7,14 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.TypedQuery;
+import java.util.HashSet;
 import java.util.List;
 
 public class Facade implements IFacade{
-    EntityManagerFactory emf = Persistence.createEntityManagerFactory("pu");
+    EntityManagerFactory emf;// = Persistence.createEntityManagerFactory("pu");
 
-    public static void main(String[] args){
-
+    public Facade(EntityManagerFactory emf) {
+        this.emf = emf;
     }
 
     //Find all Students in the system

@@ -4,14 +4,19 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
+@NamedQueries({
+        @NamedQuery(name = "Student.findAll", query = "SELECT s FROM Student s"),
+        @NamedQuery(name = "Student.deleteAll", query = "DELETE FROM Student s")
+})
 public class Student {
     @Id
-    @Column(name = "ID")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "ID", nullable = false)
     private long id;
     private String firstname;
     private String lastname;
     @ManyToOne
-    @JoinColumn(name = "CURRENTSEMESTER_ID")
+    @JoinColumn(name = "CURRENTSEMESTER_ID", referencedColumnName = "id")
     private Semester semester;
 
     public Student() {
@@ -57,16 +62,17 @@ public class Student {
     public void setSemester(Semester semester) {
         this.semester = semester;
     }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Student)) return false;
+        if (o == null || getClass() != o.getClass()) return false;
         Student student = (Student) o;
-        return getFirstname().equals(student.getFirstname()) && getLastname().equals(student.getLastname());
+        return Objects.equals(firstname, student.firstname) && Objects.equals(lastname, student.lastname);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getFirstname(), getLastname());
+        return Objects.hash(firstname, lastname);
     }
 }

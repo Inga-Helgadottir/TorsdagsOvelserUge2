@@ -6,11 +6,13 @@ import java.io.Serializable;
 import java.util.Objects;
 
 public class TeacherSemesterPK implements Serializable {
-    private long teachingId;
-    private long teachersId;
-
     @Column(name = "teaching_ID")
     @Id
+    private long teachingId;
+    @Column(name = "teachers_ID")
+    @Id
+    private long teachersId;
+
     public long getTeachingId() {
         return teachingId;
     }
@@ -19,8 +21,6 @@ public class TeacherSemesterPK implements Serializable {
         this.teachingId = teachingId;
     }
 
-    @Column(name = "teachers_ID")
-    @Id
     public long getTeachersId() {
         return teachersId;
     }

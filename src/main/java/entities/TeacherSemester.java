@@ -7,11 +7,13 @@ import java.util.Objects;
 @Table(name = "TEACHER_SEMESTER", schema = "ExamPreparationJPQL", catalog = "")
 @IdClass(TeacherSemesterPK.class)
 public class TeacherSemester {
-    private long teachingId;
-    private long teachersId;
-
     @Id
     @Column(name = "teaching_ID")
+    private long teachingId;
+    @Id
+    @Column(name = "teachers_ID")
+    private long teachersId;
+
     public long getTeachingId() {
         return teachingId;
     }
@@ -20,8 +22,6 @@ public class TeacherSemester {
         this.teachingId = teachingId;
     }
 
-    @Id
-    @Column(name = "teachers_ID")
     public long getTeachersId() {
         return teachersId;
     }

@@ -1,18 +1,25 @@
 package entities;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
+@NamedQueries({
+        @NamedQuery(name = "Teacher.findAll", query = "SELECT t FROM Teacher t"),
+        @NamedQuery(name = "Teacher.deleteAll", query = "DELETE FROM Teacher t")
+})
 public class Teacher {
     @Id
-    @Column(name = "ID")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "ID", nullable = false)
     private long id;
     private String firstname;
     private String lastname;
+    @ManyToMany
+    @JoinColumn(name = "CURRENTSEMESTER_ID", referencedColumnName = "id")
+    private Set<Semester> semesters = new HashSet<>();
 
     public Teacher() {
     }
