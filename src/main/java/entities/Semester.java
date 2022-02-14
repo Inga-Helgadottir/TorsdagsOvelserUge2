@@ -18,7 +18,6 @@ public class Semester {
     private String description;
     private String name;
     @ManyToMany(mappedBy = "semesters")
-    @JoinColumn(name = "teaching_ID", referencedColumnName = "id")
     private Set<Teacher> teachers = new HashSet<>();
 
     @OneToMany(mappedBy = "semester")

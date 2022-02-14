@@ -3,7 +3,6 @@ package Facade;
 import entities.Semester;
 import entities.Student;
 import entities.Teacher;
-import entities.TeacherSemester;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,9 +10,6 @@ import org.junit.jupiter.api.Test;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-import javax.persistence.TypedQuery;
-import java.util.ArrayList;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -28,6 +24,7 @@ class FacadeTest {
             make functions:
                 Find the teacher who teaches the most semesters.
                 nr 9 + 10
+            https://vladmihalcea.com/the-best-way-to-use-the-manytomany-annotation-with-jpa-and-hibernate/
      */
 
     @BeforeEach
