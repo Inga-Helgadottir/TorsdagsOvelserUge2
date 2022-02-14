@@ -75,4 +75,8 @@ public class Student {
     public int hashCode() {
         return Objects.hash(firstname, lastname);
     }
+
+    public long intValue() {
+        return this.getId();
+    }
 }

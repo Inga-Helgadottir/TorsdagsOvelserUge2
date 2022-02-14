@@ -78,8 +78,8 @@ public class Semester {
         this.name = name;
     }
 
-    public void setTeachers(Teacher teachers) {
-        this.teachers.add(teachers);
+    public void setTeachers(Teacher teacher) {
+        this.teachers.add(teacher);
     }
 
     public Set<Student> getS() {
@@ -101,6 +101,10 @@ public class Semester {
     @Override
     public int hashCode() {
         return Objects.hash(description, name);
+    }
+
+    public long intValue() {
+        return this.getId();
     }
 
 }

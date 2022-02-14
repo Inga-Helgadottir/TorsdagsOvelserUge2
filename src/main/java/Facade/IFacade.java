@@ -1,8 +1,11 @@
 package Facade;
 
+import entities.Semester;
 import entities.Student;
 import entities.Teacher;
 
+import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
 import java.util.List;
 
 public interface IFacade {
@@ -30,4 +33,10 @@ public interface IFacade {
 
     //Find (using JPQL) the teacher who teaches the most semesters.
     public Teacher teacherOfMostSemesters();
+
+    long findStudentId(Student s);
+
+    public long findTeacherId(Teacher t);
+
+    public long findSemesterId(Semester s);
 }

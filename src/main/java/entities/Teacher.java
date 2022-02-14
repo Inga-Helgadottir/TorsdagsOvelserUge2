@@ -79,4 +79,8 @@ public class Teacher {
     public int hashCode() {
         return Objects.hash(getFirstname(), getLastname());
     }
+
+    public long intValue() {
+        return this.getId();
+    }
 }

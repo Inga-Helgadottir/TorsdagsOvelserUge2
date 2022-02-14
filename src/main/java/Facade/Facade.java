@@ -3,7 +3,6 @@ package Facade;
 import entities.Semester;
 import entities.Student;
 import entities.Teacher;
-import entities.TeacherSemester;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -107,12 +106,48 @@ public class Facade implements IFacade{
 
     //Find (using JPQL) the teacher who teaches the most semesters.
     public Teacher teacherOfMostSemesters(){
+//        EntityManager em = emf.createEntityManager();
+//        try{
+//
+//        }finally {
+//            em.close();
+//        }
+        return null;
+    }
+
+    public long findTeacherId(Teacher t){
         EntityManager em = emf.createEntityManager();
         try{
-
+            TypedQuery<Teacher> tq = em.createQuery("SELECT t FROM Teacher t WHERE t.firstname = :fn AND t.lastname = :ln", Teacher.class);
+            tq.setParameter("fn", t.getFirstname());
+            tq.setParameter("ln", t.getLastname());
+            return tq.getSingleResult().getId();
         }finally {
             em.close();
         }
-        return null;
+    }
+
+    public long findSemesterId(Semester semester){
+        EntityManager em = emf.createEntityManager();
+        try{
+            TypedQuery<Semester> tq = em.createQuery("SELECT s FROM Semester s WHERE s.name = :semName AND s.description = :des", Semester.class);
+            tq.setParameter("semName", semester.getName());
+            tq.setParameter("des", semester.getDescription());
+            return tq.getSingleResult().getId();
+        }finally {
+            em.close();
+        }
+    }
+
+    public long findStudentId(Student student){
+        EntityManager em = emf.createEntityManager();
+        try{
+            TypedQuery<Student> tq = em.createQuery("SELECT s FROM Student s WHERE s.firstname = :fn AND s.lastname = :ln", Student.class);
+            tq.setParameter("fn", student.getFirstname());
+            tq.setParameter("ln", student.getLastname());
+            return tq.getSingleResult().getId();
+        }finally {
+            em.close();
+        }
     }
 }
