@@ -14,6 +14,14 @@ public class TeacherSemester {
     @Column(name = "teachers_ID")
     private long teachersId;
 
+    public TeacherSemester() {
+    }
+
+    public TeacherSemester(long teachingId, long teachersId) {
+        this.teachingId = teachingId;
+        this.teachersId = teachersId;
+    }
+
     public long getTeachingId() {
         return teachingId;
     }

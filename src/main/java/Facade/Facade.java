@@ -1,13 +1,13 @@
 package Facade;
 
+import entities.Semester;
 import entities.Student;
 import entities.Teacher;
+import entities.TeacherSemester;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 import javax.persistence.TypedQuery;
-import java.util.HashSet;
 import java.util.List;
 
 public class Facade implements IFacade{
@@ -41,38 +41,49 @@ public class Facade implements IFacade{
     }
 
     //Insert a new Student into the system
-    public int addStudent(Student s){
+    public Student addStudent(Student s){
         EntityManager em = emf.createEntityManager();
         try {
             em.getTransaction().begin();
             em.persist(s);
             em.getTransaction().commit();
+            return s;
         }finally {
             em.close();
         }
-        System.out.println("A new student has been added, with the name " + s.getFirstname());
-        return findAllStudents().size();
     }
 
     //Assign a new student to a semester
-    public Student assignStudentToSemester(Student s){
-        return null;
+    public Student assignStudentToSemester(long semId, long studentId){
+        EntityManager em = emf.createEntityManager();
+        Semester sem = em.find(Semester.class, semId);
+        Student stu = em.find(Student.class, studentId);
+        sem.setStudent(stu);
+        try{
+            em.getTransaction().begin();
+            Student merged = em.merge(stu);
+            em.merge(sem);
+            em.getTransaction().commit();
+            return merged;
+        }finally {
+            em.close();
+        }
     }
 
     //Find (using JPQL) all Students in the system with the last name And
-    public List<Student> allStudentsLastName(String name){
+    public Student allStudentsLastName(String name){
         EntityManager em = emf.createEntityManager();
         try{
             TypedQuery<Student> tq = em.createQuery("SELECT s FROM Student s WHERE s.lastname = :LASTNAME", Student.class);
             tq.setParameter("LASTNAME", name);
-            return tq.getResultList();
+            return tq.getResultList().get(0);
         }finally {
             em.close();
         }
     }
 
     //Find (using JPQL)  the total number of students, for a semester given the semester name as a parameter.
-    public int nbrOfStudentsInSemester(String semester){
+    public long nbrOfStudentsInSemester(String semester){
         EntityManager em = emf.createEntityManager();
         try{
             TypedQuery<Long> tq = em.createQuery("SELECT COUNT(s) FROM Student s WHERE s.semester.name = :sem", Long.class);
@@ -84,12 +95,24 @@ public class Facade implements IFacade{
     }
 
     //Find (using JPQL) the total number of students in all semesters.
-    public int nbrOfStudentsInAllSemesters(){
-        return 0;
+    public long nbrOfStudentsInAllSemesters(){
+        EntityManager em = emf.createEntityManager();
+        try{
+            TypedQuery<Long> tq = em.createQuery("SELECT COUNT(s) FROM Student s WHERE s.semester != null", Long.class);
+            return tq.getSingleResult().intValue();
+        }finally {
+            em.close();
+        }
     }
 
     //Find (using JPQL) the teacher who teaches the most semesters.
     public Teacher teacherOfMostSemesters(){
+        EntityManager em = emf.createEntityManager();
+        try{
+
+        }finally {
+            em.close();
+        }
         return null;
     }
 }

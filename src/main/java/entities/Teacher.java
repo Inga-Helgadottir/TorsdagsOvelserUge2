@@ -18,7 +18,7 @@ public class Teacher {
     private String firstname;
     private String lastname;
     @ManyToMany
-    @JoinColumn(name = "CURRENTSEMESTER_ID", referencedColumnName = "id")
+    @JoinColumn(name = "teachers_ID", referencedColumnName = "id")
     private Set<Semester> semesters = new HashSet<>();
 
     public Teacher() {
@@ -57,6 +57,14 @@ public class Teacher {
 
     public void setLastname(String lastname) {
         this.lastname = lastname;
+    }
+
+    public Set<Semester> getSemesters() {
+        return semesters;
+    }
+
+    public void setSemesters(Semester semesters) {
+        this.semesters.add(semesters);
     }
 
     @Override

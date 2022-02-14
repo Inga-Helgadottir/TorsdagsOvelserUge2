@@ -3,6 +3,7 @@ package Facade;
 import entities.Semester;
 import entities.Student;
 import entities.Teacher;
+import entities.TeacherSemester;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,15 +22,11 @@ class FacadeTest {
     Teacher t1, t2, t3;
     Semester sem1, sem2;
     IFacade f = new Facade(emf);
-    List<Student> expected;
     /* TODO:
-            look over screenshots
-            fix all functions after change
-            connect tables for functions:
-                Assign a new student to a semester
-                Find the total number of students in all semesters.
+            linktable
+            make functions:
                 Find the teacher who teaches the most semesters.
-            nr 9 + 10
+                nr 9 + 10
      */
 
     @BeforeEach
@@ -51,14 +48,14 @@ class FacadeTest {
             sem1 = new Semester("Third sem", "Very interesting semester");
             sem2 = new Semester("Fourth sem", "Amazing learning");
 
-            sem1.addStudent(s1);
-            sem1.addStudent(s2);
-            sem2.addStudent(s3);
+            sem1.setStudent(s1);
+            sem1.setStudent(s2);
+            sem2.setStudent(s3);
 
-            sem1.addTeacher(t1);
-            sem2.addTeacher(t2);
-            sem2.addTeacher(t3);
-            sem1.addTeacher(t3);
+            sem1.setTeachers(t1);
+            sem2.setTeachers(t2);
+            sem2.setTeachers(t3);
+            sem1.setTeachers(t3);
 
             em.persist(s1);
             em.persist(s2);
@@ -68,23 +65,11 @@ class FacadeTest {
             em.persist(t3);
             em.persist(sem1);
             em.persist(sem2);
+
             em.getTransaction().commit();
         }finally {
             em.close();
         }
-//        expected = new ArrayList<>();
-//        Student s = new Student("Jens", "Jensen");
-//        Student s2 = new Student("Hans", "Hansen");
-//        Student s3 = new Student("John", "Doe");
-//        Student s4 = new Student("Jane", "Doe");
-//        Student s5 = new Student("Andersine", "And");
-//        Student s6 = new Student("Anders", "And");
-//        expected.add(s);
-//        expected.add(s2);
-//        expected.add(s3);
-//        expected.add(s4);
-//        expected.add(s5);
-//        expected.add(s6);
     }
 
     @AfterEach
@@ -98,8 +83,6 @@ class FacadeTest {
         int expected = 3;
         int actual = f.findAllStudents().size();
         assertEquals(expected, actual);
-//        List<Student> actual = f.findAllStudents();
-//        assertEquals(expected, actual);
     }
 
     //Find all Students in the System with the first name Anders
@@ -108,58 +91,37 @@ class FacadeTest {
         System.out.println("Find all Students in the System with the first name Anders");
         Student expected = new Student("Hamud", "Husseini");
         Student actual = f.findAllStudentsWithFirstName("Hamud").iterator().next();
-        System.out.println("here-------------");
-        System.out.println(actual.equals(expected));
-        System.out.println(actual.getFirstname() + " - " + expected.getFirstname());
-        System.out.println(actual.getLastname() + " - " + expected.getLastname());
         assertEquals(expected, actual);
-        /*
-        List<Student> expected2 = new ArrayList<>();
-        String checkForName = "Anders";
-        for (int i = 0; i < expected.size(); i++) {
-            if(expected.get(i).getFirstname().equals(checkForName)){
-                expected2.add(expected.get(i));
-            }
-        }
-        List<Student> actual = f.findAllStudentsWithFirstName("Anders");
-        assertEquals(expected2, actual);*/
     }
 
     //Insert a new Student into the system
     @Test
     void addStudent() {
         System.out.println("Insert a new Student into the system");
-        int expected2 = 6;
-        int actual2 = f.findAllStudents().size();
-        assertEquals(expected2, actual2);
-
-        Student s = new Student("Inga", "Helgadottir");
-        expected.add(s);
-        int expected = 7;
-        int actual = f.addStudent(s);
+        Student s = f.addStudent(new Student("Inga", "Helgadottir"));
+        int expected = 4;
+        int actual = f.findAllStudents().size();
         assertEquals(expected, actual);
     }
-/*
+
     //Assign a new student to a semester
     @Test
     void assignStudentToSemester() {
         System.out.println("Assign a new student to a semester");
-//        assertEquals(expected, actual);
-    }*/
+        Student changed = f.assignStudentToSemester(sem2.getId(), s1.getId());
+        String expected = sem2.getName();
+        System.out.println(changed.getSemester());
+        String actual = changed.getSemester().getName();
+        assertEquals(expected, actual);
+    }
 
     //Find (using JPQL) all Students in the system with the last name And
     @Test
     void allStudentsLastName() {
         System.out.println("Find (using JPQL) all Students in the system with the last name And");
-        List<Student> expected2 = new ArrayList<>();
-        String checkForName = "And";
-        for (int i = 0; i < expected.size(); i++) {
-            if(expected.get(i).getLastname().equals(checkForName)){
-                expected2.add(expected.get(i));
-            }
-        }
-        List<Student> actual = f.allStudentsLastName("And");
-        assertEquals(expected2, actual);
+        Student expected = new Student("Hamud", "Husseini");
+        Student actual = f.allStudentsLastName("Husseini");
+        assertEquals(expected, actual);
     }
 
 
@@ -167,22 +129,26 @@ class FacadeTest {
     @Test
     void nbrOfStudentsInSemester() {
         System.out.println("Find (using JPQL)  the total number of students, for a semester given the semester name as a parameter");
-        int expected = 2;
-        int actual = f.nbrOfStudentsInSemester("CLdat-a14e");
+        long expected = 1;
+        long actual = f.nbrOfStudentsInSemester("Amazing learning");
         assertEquals(expected, actual);
     }
-/*
+
     //Find (using JPQL) the total number of students in all semesters.
     @Test
     void nbrOfStudentsInAllSemesters() {
         System.out.println("Find (using JPQL) the total number of students in all semesters.");
-//        assertEquals(expected, actual);
+        long actual = f.nbrOfStudentsInAllSemesters();
+        long expected = 3;
+        assertEquals(expected, actual);
     }
-
+/*
     //Find (using JPQL) the teacher who teaches the most semesters.
     @Test
     void teacherOfMostSemesters() {
         System.out.println("Find (using JPQL) the teacher who teaches the most semesters.");
-//        assertEquals(expected, actual);
+        Teacher expected = new Teacher("Taiko", "Takamoto");
+        Teacher actual = f.teacherOfMostSemesters();
+        assertEquals(expected, actual);
     }*/
 }

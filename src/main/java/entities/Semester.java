@@ -1,5 +1,7 @@
 package entities;
 
+import Facade.Facade;
+
 import javax.persistence.*;
 import java.util.*;
 
@@ -16,6 +18,7 @@ public class Semester {
     private String description;
     private String name;
     @ManyToMany(mappedBy = "semesters")
+    @JoinColumn(name = "teaching_ID", referencedColumnName = "id")
     private Set<Teacher> teachers = new HashSet<>();
 
     @OneToMany(mappedBy = "semester")
@@ -60,8 +63,9 @@ public class Semester {
         return s;
     }
 
-    public void addStudent(Student s) {
+    public void setStudent(Student s) {
         this.s.add(s);
+        s.setSemester(this);
     }
 
     @Basic
@@ -72,6 +76,18 @@ public class Semester {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public void setTeachers(Teacher teachers) {
+        this.teachers.add(teachers);
+    }
+
+    public Set<Student> getS() {
+        return s;
+    }
+
+    public void setS(Set<Student> s) {
+        this.s = s;
     }
 
     @Override
@@ -86,4 +102,5 @@ public class Semester {
     public int hashCode() {
         return Objects.hash(description, name);
     }
+
 }
